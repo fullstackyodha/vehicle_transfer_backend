@@ -7,8 +7,6 @@ export const createVehicle = async (req: Request, res: Response, next: NextFunct
     try {
         const { vehicleNumber, vehicleType } = JSON.parse(req.body.vehicleData);
 
-        const exisitingVehicle = await VehicleService.getVehicleByNumber(vehicleNumber);
-
         const pucCertificate =
             req.files && 'pucCertificate' in req.files
                 ? req.files['pucCertificate'][0].filename
@@ -24,6 +22,8 @@ export const createVehicle = async (req: Request, res: Response, next: NextFunct
                 message: 'Please upload PUC and Insurance certificates'
             });
         }
+
+        const exisitingVehicle = await VehicleService.getVehicleByNumber(vehicleNumber);
 
         if (exisitingVehicle) {
             fs.rm('./uploads/pucCertificates/' + pucCertificate, () => {});
@@ -51,6 +51,9 @@ export const createVehicle = async (req: Request, res: Response, next: NextFunct
             data: { ...createdVehicle }
         });
     } catch (error) {
-        res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: 'Internal Server Error' });
+        res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+            message: 'Internal Server Error',
+            error
+        });
     }
 };

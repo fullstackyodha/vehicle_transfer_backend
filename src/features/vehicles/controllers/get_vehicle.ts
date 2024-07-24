@@ -16,9 +16,10 @@ export const getAllVehicle = async (req: Request, res: Response, next: NextFunct
             message: 'All Vehicles Data',
             data: { vehicles: [...allVehicle] }
         });
-    } catch (err) {
+    } catch (error) {
         res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
-            message: 'Internal Server Error'
+            message: 'Internal Server Error',
+            error
         });
     }
 };
@@ -39,9 +40,10 @@ export const getVehicleByNumber = async (req: Request, res: Response, next: Next
             message: 'Vehicle Data',
             data: { vehicle }
         });
-    } catch (err) {
+    } catch (error) {
         res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
-            message: 'Internal Server Error'
+            message: 'Internal Server Error',
+            error
         });
     }
 };

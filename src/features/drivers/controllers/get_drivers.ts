@@ -1,22 +1,26 @@
 import { DriverService } from '@/services/drivers.service';
 import { BadRequestError } from '@/utils/ErrorHandler';
 import { Request, Response, NextFunction } from 'express';
+import HTTP_STATUS from 'http-status-codes';
 
 export const getAllDriver = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const allDrivers = await DriverService.getAllDrivers();
 
         if (!allDrivers) {
-            throw new BadRequestError('Error Getting Driver Data');
+            res.status(HTTP_STATUS.BAD_REQUEST).json({
+                message: 'Error Getting Driver Data'
+            });
         }
 
-        res.status(200).json({
+        res.status(HTTP_STATUS.OK).json({
             message: 'All Drivers Data',
             data: { drivers: [...allDrivers] }
         });
-    } catch (err) {
-        res.status(400).json({
-            message: err
+    } catch (error) {
+        res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+            message: 'Internal Server Error',
+            error
         });
     }
 };
@@ -28,16 +32,17 @@ export const getDriverById = async (req: Request, res: Response, next: NextFunct
         const driver = await DriverService.getDriverById(+id);
 
         if (!driver) {
-            throw new BadRequestError(`Driver with id ${id} not found`);
+            res.status(HTTP_STATUS.BAD_REQUEST).json({ message: `Driver with id ${id} not found` });
         }
 
-        res.status(200).json({
+        res.status(HTTP_STATUS.OK).json({
             message: 'Driver Data',
             data: { driver }
         });
-    } catch (err) {
-        res.status(400).json({
-            message: err
+    } catch (error) {
+        res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
+            message: 'Internal Server Error',
+            error
         });
     }
 };
