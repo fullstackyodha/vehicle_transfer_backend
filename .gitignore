@@ -8,6 +8,8 @@ yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
 
+uploads
+
 # Ignore Build Folder and files in it
 build
 

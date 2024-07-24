@@ -8,8 +8,8 @@ export const createDriver = async (req: Request, res: Response, next: NextFuncti
         const { name, phoneNumber } = JSON.parse(req.body.driverData);
         const profilePhoto = req.file?.path || '';
 
-        console.log('Data: ', name, phoneNumber);
-        console.log('Profile Photo: ', profilePhoto);
+        // console.log('Data: ', name, phoneNumber);
+        // console.log('Profile Photo: ', profilePhoto);
 
         // Find driver by phone number
         const exisitngDriver = await DriverService.findDriverByPhoneNumber(phoneNumber);
@@ -38,7 +38,7 @@ export const createDriver = async (req: Request, res: Response, next: NextFuncti
         });
     } catch (err) {
         res.status(HTTP_STATUS.BAD_REQUEST).json({
-            error: err
+            err
         });
     }
 };
