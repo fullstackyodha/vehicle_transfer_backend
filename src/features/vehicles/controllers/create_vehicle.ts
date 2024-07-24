@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { VehicleService } from '@/services/vehicle.service';
 import HTTP_STATUS from 'http-status-codes';
 import fs from 'fs';
+import { BadRequestError, CustomError } from '@/utils/ErrorHandler';
 
 export const createVehicle = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -18,9 +19,7 @@ export const createVehicle = async (req: Request, res: Response, next: NextFunct
                 : '';
 
         if (!pucCertificate || !insuranceCertificate) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({
-                message: 'Please upload PUC and Insurance certificates'
-            });
+            throw new BadRequestError('Please upload PUC and Insurance certificates');
         }
 
         const exisitingVehicle = await VehicleService.getVehicleByNumber(vehicleNumber);
@@ -29,7 +28,7 @@ export const createVehicle = async (req: Request, res: Response, next: NextFunct
             fs.rm('./uploads/pucCertificates/' + pucCertificate, () => {});
             fs.rm('./uploads/insuranceCertificates/' + insuranceCertificate, () => {});
 
-            res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'Vehicle already exists' });
+            throw new BadRequestError('Vehicle already exists');
         }
 
         // Create The Vehicle
@@ -42,7 +41,7 @@ export const createVehicle = async (req: Request, res: Response, next: NextFunct
 
         // If vehicle not created throw error
         if (!createdVehicle) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'Error Creating Vehicle.' });
+            throw new BadRequestError('Error Creating Vehicle.');
         }
 
         // Else return response
@@ -50,10 +49,9 @@ export const createVehicle = async (req: Request, res: Response, next: NextFunct
             message: 'Vehicle created successfully',
             data: { ...createdVehicle }
         });
-    } catch (error) {
+    } catch (error: CustomError | any) {
         res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
-            message: 'Internal Server Error',
-            error
+            message: error.message
         });
     }
 };

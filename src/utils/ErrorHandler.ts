@@ -48,36 +48,9 @@ export class BadRequestError extends CustomError {
     }
 }
 
-export class JOIValidationError extends CustomError {
-    status = 'error';
-    status_code = HTTP_STATUS.BAD_REQUEST;
-
-    constructor(message: string) {
-        super(message);
-    }
-}
-
 export class NotFoundError extends CustomError {
     status = 'error';
     status_code = HTTP_STATUS.NOT_FOUND;
-
-    constructor(message: string) {
-        super(message);
-    }
-}
-
-export class UnauthorizedError extends CustomError {
-    status = 'error';
-    status_code = HTTP_STATUS.UNAUTHORIZED;
-
-    constructor(message: string) {
-        super(message);
-    }
-}
-
-export class FileTooLargeError extends CustomError {
-    status = 'error';
-    status_code = HTTP_STATUS.REQUEST_TOO_LONG;
 
     constructor(message: string) {
         super(message);

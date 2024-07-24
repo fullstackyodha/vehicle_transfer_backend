@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { BadRequestError } from '@/utils/ErrorHandler';
+import { BadRequestError, CustomError } from '@/utils/ErrorHandler';
 import { DriverService } from '@/services/drivers.service';
 import HTTP_STATUS from 'http-status-codes';
 import fs from 'fs';
@@ -10,9 +10,7 @@ export const createDriver = async (req: Request, res: Response, next: NextFuncti
         const profilePhoto = req.file?.filename || '';
 
         if (!profilePhoto) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({
-                message: 'Please upload Profile Photo'
-            });
+            throw new BadRequestError('Please upload Profile Photo');
         }
 
         // Find driver by phone number
@@ -22,9 +20,7 @@ export const createDriver = async (req: Request, res: Response, next: NextFuncti
         if (exisitngDriver) {
             fs.rm('./uploads/profilePhotos/' + profilePhoto, () => {});
 
-            res.status(HTTP_STATUS.BAD_REQUEST).json({
-                message: 'Driver already exisit with this Phone Number'
-            });
+            throw new BadRequestError('Driver already exisit with this Phone Number');
         }
 
         // Create The Driver
@@ -36,9 +32,7 @@ export const createDriver = async (req: Request, res: Response, next: NextFuncti
 
         // If driver not created throw error
         if (!createdDriver) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({
-                message: 'Error Creating Driver.'
-            });
+            throw new BadRequestError('Error Creating Driver.');
         }
 
         // Else return response
@@ -46,9 +40,9 @@ export const createDriver = async (req: Request, res: Response, next: NextFuncti
             message: 'Driver created successfully',
             data: { ...createdDriver }
         });
-    } catch (err) {
+    } catch (error: CustomError | any) {
         res.status(HTTP_STATUS.BAD_REQUEST).json({
-            message: 'Internal Server Error'
+            message: error.message
         });
     }
 };

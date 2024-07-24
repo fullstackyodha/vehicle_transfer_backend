@@ -1,4 +1,5 @@
 import { VehicleService } from '@/services/vehicle.service';
+import { BadRequestError, CustomError } from '@/utils/ErrorHandler';
 import { Request, Response, NextFunction } from 'express';
 import HTTP_STATUS from 'http-status-codes';
 
@@ -7,19 +8,16 @@ export const getAllVehicle = async (req: Request, res: Response, next: NextFunct
         const allVehicle = await VehicleService.getAllVehicle();
 
         if (!allVehicle) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({
-                message: 'Error Getting Vehicle Data'
-            });
+            throw new BadRequestError('Error Getting Vehicle Data');
         }
 
         res.status(HTTP_STATUS.OK).json({
             message: 'All Vehicles Data',
             data: { vehicles: [...allVehicle] }
         });
-    } catch (error) {
+    } catch (error: CustomError | any) {
         res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
-            message: 'Internal Server Error',
-            error
+            message: error.message
         });
     }
 };
@@ -31,19 +29,16 @@ export const getVehicleByNumber = async (req: Request, res: Response, next: Next
         const vehicle = await VehicleService.getVehicleByNumber(number);
 
         if (!vehicle) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({
-                message: `Vehicle Number ${number} don't exist`
-            });
+            throw new BadRequestError(`Vehicle Number ${number} don't exist`);
         }
 
         res.status(HTTP_STATUS.OK).json({
             message: 'Vehicle Data',
             data: { vehicle }
         });
-    } catch (error) {
+    } catch (error: CustomError | any) {
         res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({
-            message: 'Internal Server Error',
-            error
+            message: error.message
         });
     }
 };
