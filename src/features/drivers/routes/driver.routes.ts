@@ -1,6 +1,7 @@
 import express, { Router } from 'express';
 import { createDriver } from '@/features/drivers/controllers/create_driver';
 import { upload } from '@/app';
+import { getAllDriver, getDriverById } from '../controllers/get_drivers';
 
 class DriverRoutes {
     private router: Router;
@@ -13,9 +14,9 @@ class DriverRoutes {
         // req object will be populated with a file object containing information about the processed file.
         this.router.post('/create', upload.single('profilePhoto'), createDriver);
 
-        // this.router.get('/allDrivers', getAllDriver);
+        this.router.get('/allDrivers', getAllDriver);
 
-        // this.router.get('/:id', getDriverById);
+        this.router.get('/:id', getDriverById);
 
         return this.router;
     }
