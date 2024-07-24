@@ -27,6 +27,6 @@ export const storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         // Name of the file on the uploader's computer.
-        cb(null, `${Date.now()}-${file.originalname}`);
+        cb(null, `${Date.now()}_${file.originalname}`);
     }
 });
