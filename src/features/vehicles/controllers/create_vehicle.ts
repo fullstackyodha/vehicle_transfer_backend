@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { BadRequestError } from '@/utils/ErrorHandler';
 import { VehicleService } from '@/services/vehicle.service';
-import fs from 'fs';
 import HTTP_STATUS from 'http-status-codes';
+import fs from 'fs';
 
 export const createVehicle = async (req: Request, res: Response, next: NextFunction) => {
     try {

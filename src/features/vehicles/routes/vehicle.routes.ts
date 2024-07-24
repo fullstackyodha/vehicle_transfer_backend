@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 import { createVehicle } from '@/features/vehicles/controllers/create_vehicle';
-import { getAllVehicle, getVehicleById } from '@/features/vehicles/controllers/get_vehicle';
+import { getAllVehicle, getVehicleByNumber } from '@/features/vehicles/controllers/get_vehicle';
 import { upload } from '@/app';
 
 class VehicleRoutes {
@@ -22,7 +22,7 @@ class VehicleRoutes {
 
         this.router.get('/allVehicles', getAllVehicle);
 
-        this.router.get('/:id', getVehicleById);
+        this.router.get('/:number', getVehicleByNumber);
 
         return this.router;
     }
