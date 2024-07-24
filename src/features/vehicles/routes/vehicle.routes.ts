@@ -1,8 +1,5 @@
 import express, { Router } from 'express';
-import {
-    checkIfVehicleExists,
-    createVehicle
-} from '@/features/vehicles/controllers/create_vehicle';
+import { createVehicle } from '@/features/vehicles/controllers/create_vehicle';
 import { getAllVehicle, getVehicleById } from '@/features/vehicles/controllers/get_vehicle';
 import { upload } from '@/app';
 
@@ -16,7 +13,6 @@ class VehicleRoutes {
     public routes(): Router {
         this.router.post(
             '/create',
-            checkIfVehicleExists,
             upload.fields([
                 { name: 'pucCertificate', maxCount: 1 },
                 { name: 'insuranceCertificate', maxCount: 1 }

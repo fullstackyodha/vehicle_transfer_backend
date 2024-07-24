@@ -17,14 +17,6 @@ export class VehicleService {
         }
     }
 
-    static async findVehicleByNumber(vehicleNumber: string) {
-        const vehicleRepository = AppDataSource.getRepository(Vehicle);
-
-        const vehicle = await vehicleRepository.findOneBy({ vehicleNumber });
-
-        return vehicle;
-    }
-
     static async getAllVehicle() {
         const vehicleRepository = AppDataSource.getRepository(Vehicle);
 
@@ -40,18 +32,4 @@ export class VehicleService {
 
         return vehicle;
     }
-
-    // static async getVehicleByNumber(vehicleNumber: string) {
-    //     const vehicleRepository = AppDataSource.getRepository(Vehicle);
-
-    //     const query = `
-    //         SELECT id
-    //         FROM vehicle
-    //         WHERE "vehicleNumber" = '${vehicleNumber}'
-    //     `;
-
-    //     const vehicle_id = await vehicleRepository.query(query);
-
-    //     return vehicle_id[0].id;
-    // }
 }
