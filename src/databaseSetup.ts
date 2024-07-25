@@ -1,6 +1,7 @@
 import { DataSource } from 'typeorm';
 import { Driver } from '@/features/drivers/models/Driver.model';
 import { Vehicle } from '@/features/vehicles/models/Vehicle.model';
+import { AssignedVehicles } from './features/assign/model/assign.model';
 
 export let AppDataSource: DataSource;
 
@@ -15,7 +16,7 @@ export default function () {
             database: 'vehicle_transfer_db',
             synchronize: true,
             logging: true,
-            entities: [Driver, Vehicle],
+            entities: [Driver, Vehicle, AssignedVehicles],
             subscribers: [],
             migrations: []
         });
