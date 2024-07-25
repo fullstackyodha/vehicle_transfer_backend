@@ -1,27 +1,27 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class TransferHistory {
-    @PrimaryColumn()
+    @PrimaryGeneratedColumn()
     transferId: string;
 
     @Column()
     vehicleNumber: string;
 
     @Column()
-    fromDriverId: string;
+    fromDriverId: number;
 
     @Column()
-    toDriverId: string;
+    toDriverId: number;
 
-    @Column({ type: 'timestamp' })
+    @Column({ type: 'timestamp', nullable: false })
     transferDate: string;
 
     constructor(
         transferId: string,
         vehicleNumber: string,
-        fromDriverId: string,
-        toDriverId: string,
+        fromDriverId: number,
+        toDriverId: number,
         transferDate: string
     ) {
         this.transferId = transferId;

@@ -1,6 +1,5 @@
 import { AppDataSource } from '@/databaseSetup';
 import { AssignedVehicles } from '@/features/assign/model/assign.model';
-import { BadRequestError, CustomError, NotFoundError } from '@/utils/ErrorHandler';
 
 export class AssignService {
     static async assignVehicle(driverId: number, vehicleNumber: string) {
@@ -32,6 +31,7 @@ export class AssignService {
                 INNER JOIN vehicle ON ranked."vehicleNumber" = vehicle."vehicleNumber"
                 INNER JOIN driver ON ranked."driverId" = driver.id
                 WHERE rank = 1
+                ORDER BY ranked."assignedDate" DESC
             `;
 
         const assignedVehicle = await assignRepository.query(query);

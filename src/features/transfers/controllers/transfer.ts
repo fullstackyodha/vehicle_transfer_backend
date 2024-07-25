@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import { TransferService } from '@/services/transfer.service';
 import HTTP_STATUS from 'http-status-codes';
-import { BadRequestError } from '@/utils/ErrorHandler';
+import { BadRequestError, CustomError } from '@/utils/ErrorHandler';
 import { AssignService } from '@/services/assign.service';
+import { VehicleService } from '@/services/vehicle.service';
 
 export const createTransfer = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -16,9 +17,9 @@ export const createTransfer = async (req: Request, res: Response, next: NextFunc
         }
 
         const createdTransfer = await TransferService.transferVehicle(
-            fromDriverId,
-            toDriverId,
-            vehicleNumber
+            vehicleNumber,
+            +fromDriverId,
+            +toDriverId
         );
 
         const assignedDriver = await AssignService.assignVehicle(toDriverId, vehicleNumber);
@@ -43,32 +44,37 @@ export const getTransferHistoryByVehicleNumber = async (
     res: Response,
     next: NextFunction
 ) => {
-    // try {
-    //     const { vehicleNumber } = req.params;
-    //     const vehicle_id = await VehicleService.getVehicleByNumber(vehicleNumber);
-    //     const transferHistory = await TransferService.getTansferHistory(vehicle_id);
-    //     res.status(HTTP_STATUS.OK).json({
-    //         message: 'Transfer History',
-    //         data: {
-    //             transfers: transferHistory
-    //         }
-    //     });
-    // } catch (err) {
-    //     res.status(HTTP_STATUS.BAD_REQUEST).json({
-    //         message: `${err}`
-    //     });
-    // }
-};
-
-export const getAllTransferedVehicle = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const allTransferedvehicles = await TransferService.getAllTransferedVehicleData();
+        const { vehicleNumber } = req.params;
+
+        const transferHistory = await TransferService.getTansferHistory(vehicleNumber);
 
         res.status(HTTP_STATUS.OK).json({
-            message: '',
+            message: 'Transfer History',
             data: {
-                vehicles: allTransferedvehicles
+                transfers: transferHistory
             }
         });
-    } catch (err) {}
+    } catch (error: CustomError | any) {
+        res.status(error.status_code).json({
+            message: error.message
+        });
+    }
 };
+
+// export const getAllTransferedVehicle = async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//         const allTransferedvehicles = await TransferService.getAllTransferedVehicleData();
+
+//         res.status(HTTP_STATUS.OK).json({
+//             message: 'All Transfered Vehicles',
+//             data: {
+//                 vehicles: allTransferedvehicles
+//             }
+//         });
+//     } catch (error: CustomError | any) {
+//         res.status(error.status_code).json({
+//             message: error.message
+//         });
+//     }
+// };

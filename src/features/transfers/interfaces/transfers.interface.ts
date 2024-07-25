@@ -1,6 +1,6 @@
 interface TransferData {
     vehicleNumber: string;
-    fromDriverId: string;
-    toDriverId: string;
+    fromDriverId: number;
+    toDriverId: number;
     transferDate: string;
 }
