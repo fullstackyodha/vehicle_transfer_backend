@@ -1,21 +1,26 @@
-import { Entity, PrimaryColumn, Column } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class AssignedVehicles {
-    @PrimaryColumn()
-    id: string;
+    @PrimaryGeneratedColumn()
+    assignmentId: string;
 
     @Column({ nullable: false })
     vehicleNumber: string;
 
     @Column({ nullable: false })
-    driverId: string;
+    driverId: number;
 
     @Column({ type: 'timestamp', nullable: false })
     assignedDate: string;
 
-    constructor(id: string, vehicleNumber: string, driverId: string, assignedDate: string) {
-        this.id = id;
+    constructor(
+        assignmentId: string,
+        vehicleNumber: string,
+        driverId: number,
+        assignedDate: string
+    ) {
+        this.assignmentId = assignmentId;
         this.vehicleNumber = vehicleNumber;
         this.driverId = driverId;
         this.assignedDate = assignedDate;

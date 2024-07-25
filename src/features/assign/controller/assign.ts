@@ -1,4 +1,6 @@
 import { AssignService } from '@/services/assign.service';
+import { DriverService } from '@/services/drivers.service';
+import { VehicleService } from '@/services/vehicle.service';
 import { BadRequestError, CustomError } from '@/utils/ErrorHandler';
 import { Request, Response, NextFunction } from 'express';
 import HTTP_STATUS from 'http-status-codes';
@@ -7,7 +9,26 @@ export const assignVehicle = async (req: Request, res: Response, next: NextFunct
     try {
         const { driverId, vehicleNumber } = req.body;
 
-        const assignedDriver = await AssignService.assignVehicle(driverId, vehicleNumber);
+        if (!driverId || !vehicleNumber) {
+            throw new BadRequestError('All fields are required.');
+        }
+
+        const vehicle = await VehicleService.getVehicleByNumber(vehicleNumber);
+        const driver = await DriverService.getDriverById(driverId);
+
+        if (!vehicle && !driver) {
+            throw new BadRequestError(`Driver and Vehicle Not Found`);
+        }
+
+        if (!vehicle) {
+            throw new BadRequestError(`Vehicle with number ${vehicleNumber} Not Found`);
+        }
+
+        if (!driver) {
+            throw new BadRequestError(`Driver with Id ${driverId} Not Found`);
+        }
+
+        const assignedDriver = await AssignService.assignVehicle(+driverId, vehicleNumber);
 
         if (!assignedDriver) {
             throw new BadRequestError('Error assigning vehicle to the driver.');
@@ -29,7 +50,7 @@ export const getAllAssignedVehicle = async (req: Request, res: Response, next: N
         const allAssignedVehicle = await AssignService.getAllAssignedVehicle();
 
         if (!allAssignedVehicle) {
-            throw new BadRequestError('Error getting all currently assigned vehicle.');
+            throw new BadRequestError('No Data Found');
         }
 
         res.status(HTTP_STATUS.OK).json({

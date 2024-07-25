@@ -10,6 +10,8 @@ export default (app: Application) => {
         app.use('/api/v1/vehicles', vehicleRoutes.routes());
 
         app.use('/api/v1/assign', assignRoutes.routes());
+
+        // app.use('/api/v1/transfer', transferRoutes.routes());
     };
 
     routes();
