@@ -1,6 +1,7 @@
 import { DriverService } from '@/services/drivers.service';
 import { BadRequestError, CustomError } from '@/utils/ErrorHandler';
 import { Request, Response, NextFunction } from 'express';
+import path from 'path';
 import HTTP_STATUS from 'http-status-codes';
 
 export const getAllDriver = async (req: Request, res: Response, next: NextFunction) => {
@@ -41,4 +42,16 @@ export const getDriverById = async (req: Request, res: Response, next: NextFunct
             message: error.message
         });
     }
+};
+
+export const getDriverProfileImage = (req: Request, res: Response, next: NextFunction) => {
+    const { fileName } = req.params;
+
+    const fileLoc = path.join(__dirname, './../../../uploads/profilePhotos', fileName);
+
+    res.sendFile(fileLoc, (err) => {
+        if (err) {
+            res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'File not found' });
+        }
+    });
 };

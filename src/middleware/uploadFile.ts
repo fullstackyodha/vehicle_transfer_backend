@@ -4,17 +4,17 @@ import fs from 'fs';
 export const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         // Default folder
-        let folderName = 'uploads/';
+        let folderName = 'src/uploads/';
 
         switch (file.fieldname) {
             case 'profilePhoto':
-                folderName = 'uploads/profilePhotos';
+                folderName = 'src/uploads/profilePhotos';
                 break;
             case 'pucCertificate':
-                folderName = 'uploads/pucCertificates';
+                folderName = 'src/uploads/pucCertificates';
                 break;
             case 'insuranceCertificate':
-                folderName = 'uploads/insuranceCertificates';
+                folderName = 'src/uploads/insuranceCertificates';
                 break;
         }
 

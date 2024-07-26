@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
 import { createDriver } from '@/features/drivers/controllers/create_driver';
 import { upload } from '@/app';
-import { getAllDriver, getDriverById } from '../controllers/get_drivers';
+import { getAllDriver, getDriverById, getDriverProfileImage } from '../controllers/get_drivers';
 
 class DriverRoutes {
     private router: Router;
@@ -17,6 +17,8 @@ class DriverRoutes {
         this.router.get('/allDrivers', getAllDriver);
 
         this.router.get('/:id', getDriverById);
+
+        this.router.get('/profilePhoto/:fileName', getDriverProfileImage);
 
         return this.router;
     }
