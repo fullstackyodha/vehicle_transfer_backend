@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { VehicleService } from '@/services/vehicle.service';
 import HTTP_STATUS from 'http-status-codes';
 import fs from 'fs';
+import path from 'path';
 import { BadRequestError, CustomError } from '@/utils/ErrorHandler';
 
 export const createVehicle = async (req: Request, res: Response, next: NextFunction) => {
@@ -25,8 +26,22 @@ export const createVehicle = async (req: Request, res: Response, next: NextFunct
         const exisitingVehicle = await VehicleService.getVehicleByNumber(vehicleNumber);
 
         if (exisitingVehicle) {
-            fs.rm('./uploads/pucCertificates/' + pucCertificate, () => {});
-            fs.rm('./uploads/insuranceCertificates/' + insuranceCertificate, () => {});
+            fs.rm(
+                path.join(__dirname, './../../../uploads/pucCertificates', pucCertificate),
+                () => {}
+            );
+
+            fs.rm(
+                path.join(
+                    __dirname,
+                    './../../../uploads/insuranceCertificates',
+                    insuranceCertificate
+                ),
+                () => {}
+            );
+
+            // fs.rm('./uploads/pucCertificates/' + pucCertificate, () => {});
+            // fs.rm('./uploads/insuranceCertificates/' + insuranceCertificate, () => {});
 
             throw new BadRequestError('Vehicle already exists');
         }

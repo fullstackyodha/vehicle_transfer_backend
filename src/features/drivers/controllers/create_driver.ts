@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { BadRequestError, CustomError } from '@/utils/ErrorHandler';
 import { DriverService } from '@/services/drivers.service';
 import HTTP_STATUS from 'http-status-codes';
+import path from 'path';
 import fs from 'fs';
 
 export const createDriver = async (req: Request, res: Response, next: NextFunction) => {
@@ -18,7 +19,7 @@ export const createDriver = async (req: Request, res: Response, next: NextFuncti
 
         // If driver already present remove files and send error message
         if (exisitngDriver) {
-            fs.rm('./uploads/profilePhotos/' + profilePhoto, () => {});
+            fs.rm(path.join(__dirname, './../../../uploads/profilePhotos', profilePhoto), () => {});
 
             throw new BadRequestError('Driver already exisit with this Phone Number');
         }
