@@ -1,8 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class AssignedVehicles {
-    @PrimaryGeneratedColumn()
+    @PrimaryColumn()
     assignmentId: string;
 
     @Column({ nullable: false })

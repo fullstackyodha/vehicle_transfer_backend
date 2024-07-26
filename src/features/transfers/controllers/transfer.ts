@@ -3,7 +3,7 @@ import { TransferService } from '@/services/transfer.service';
 import HTTP_STATUS from 'http-status-codes';
 import { BadRequestError, CustomError } from '@/utils/ErrorHandler';
 import { AssignService } from '@/services/assign.service';
-import { VehicleService } from '@/services/vehicle.service';
+import { v4 as uuidv4 } from 'uuid';
 
 export const createTransfer = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -16,13 +16,20 @@ export const createTransfer = async (req: Request, res: Response, next: NextFunc
             throw new BadRequestError('Cannot Transfer Vehicle to the same person');
         }
 
+        const transferId = 'TR/' + uuidv4();
+
         const createdTransfer = await TransferService.transferVehicle(
+            transferId,
             vehicleNumber,
             +fromDriverId,
             +toDriverId
         );
 
-        const assignedDriver = await AssignService.assignVehicle(toDriverId, vehicleNumber);
+        const assignedDriver = await AssignService.assignVehicle(
+            transferId,
+            toDriverId,
+            vehicleNumber
+        );
 
         if (!createdTransfer || !assignedDriver) {
             throw new BadRequestError('Error creating transfer');

@@ -2,10 +2,11 @@ import { AppDataSource } from '@/databaseSetup';
 import { AssignedVehicles } from '@/features/assign/model/assign.model';
 
 export class AssignService {
-    static async assignVehicle(driverId: number, vehicleNumber: string) {
+    static async assignVehicle(assignmentId: string, driverId: number, vehicleNumber: string) {
         const assignRepository = AppDataSource.getRepository(AssignedVehicles);
 
         const assignedVehicle = await assignRepository.save({
+            assignmentId,
             vehicleNumber,
             driverId,
             assignedDate: new Date().toISOString()

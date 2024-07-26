@@ -1,8 +1,8 @@
-import { Entity, Column, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class TransferHistory {
-    @PrimaryGeneratedColumn()
+    @PrimaryColumn()
     transferId: string;
 
     @Column()

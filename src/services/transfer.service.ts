@@ -2,8 +2,14 @@ import { AppDataSource } from '@/databaseSetup';
 import { TransferHistory } from '@/features/transfers/models/transfer.model';
 
 export class TransferService {
-    static async transferVehicle(vehicleNumber: string, fromDriverId: number, toDriverId: number) {
+    static async transferVehicle(
+        transferId: string,
+        vehicleNumber: string,
+        fromDriverId: number,
+        toDriverId: number
+    ) {
         const transferData = {
+            transferId,
             vehicleNumber,
             fromDriverId,
             toDriverId,

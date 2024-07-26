@@ -3,6 +3,7 @@ import { DriverService } from '@/services/drivers.service';
 import { VehicleService } from '@/services/vehicle.service';
 import { BadRequestError, CustomError } from '@/utils/ErrorHandler';
 import { Request, Response, NextFunction } from 'express';
+import { v4 as uuidv4 } from 'uuid';
 import HTTP_STATUS from 'http-status-codes';
 
 export const assignVehicle = async (req: Request, res: Response, next: NextFunction) => {
@@ -28,7 +29,13 @@ export const assignVehicle = async (req: Request, res: Response, next: NextFunct
             throw new BadRequestError(`Driver with Id ${driverId} Not Found`);
         }
 
-        const assignedDriver = await AssignService.assignVehicle(+driverId, vehicleNumber);
+        const assignmentId = 'AS/' + uuidv4();
+
+        const assignedDriver = await AssignService.assignVehicle(
+            assignmentId,
+            +driverId,
+            vehicleNumber
+        );
 
         if (!assignedDriver) {
             throw new BadRequestError('Error assigning vehicle to the driver.');
